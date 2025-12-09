@@ -1,1 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sahan-X Bot QR Code</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        .qr-container {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        #qrcode {
+            margin: 20px 0;
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            color: #666;
+        }
+        .instructions {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="qr-container">
+        <h1>🤖 Sahan-X Bot</h1>
+        <p>Scan this QR with WhatsApp > Linked Devices</p>
+        <div id="qrcode"></div>
+        <p>Bot will automatically start after scanning</p>
+        
+        <div class="instructions">
+            <h3>📲 How to Scan:</h3>
+            <ol>
+                <li>Open WhatsApp on your phone</li>
+                <li>Go to Settings > Linked Devices</li>
+                <li>Tap on "Link a Device"</li>
+                <li>Point your camera at this QR code</li>
+            </ol>
+        </div>
+        
+        <p style="color: #888; font-size: 12px; margin-top: 20px;">
+            Auto-refresh every 5 seconds
+        </p>
+    </div>
 
+    <script>
+        function generateQR() {
+            fetch('/qr-data')
+                .then(response => response.json())
+                .then(data => {
+                    const qrDiv = document.getElementById('qrcode');
+                    qrDiv.innerHTML = '';
+                    
+                    if (data.qr) {
+                        QRCode.toCanvas(qrDiv, data.qr, {
+                            width: 256,
+                            margin: 2,
+                            color: {
+                                dark: '#000000',
+                                light: '#FFFFFF'
+                            }
+                        });
+                    } else {
+                        qrDiv.innerHTML = '<p style="color:green;">✅ Bot is connected! You can close this page.</p>';
+                    }
+                });
+        }
+        
+        // Generate QR on load and refresh every 5 seconds
+        generateQR();
+        setInterval(generateQR, 5000);
+    </script>
+</body>
+</html>
